@@ -43,7 +43,7 @@
 
 <div class="card">
   <h2>Ingredients</h2>
-  Please provide available ingredients and preference.
+  Please provide available ingredients and additional information.
   <form on:submit|preventDefault={handleSubmit}>
     <ul>
       {#each ingredients as ingredient, i}
@@ -56,7 +56,7 @@
         </li>
       {/each}
     </ul>
-    <label>preference: <input type="text" bind:value={preference} /></label>
+    <label>additional information (ex. mexican food, kids meal): <input type="text" bind:value={preference} /></label>
     <hr />
     <button id="submit">Submit</button>
   </form>
