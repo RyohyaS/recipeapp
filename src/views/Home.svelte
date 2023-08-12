@@ -26,7 +26,7 @@
 </script>
 
 <content>
-  <h1>Recipe Assistant</h1>
+  <h1>Recipe Finder</h1>
   <svelte:component this={page} bind:data on:continue={nextPage} />
   <button on:click={reset}>Reset</button>
   {#if data.thinking}
