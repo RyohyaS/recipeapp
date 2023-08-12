@@ -33,7 +33,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  color: #242424;
+  color: #ffffff;
 }
 
 .card {
@@ -78,8 +78,8 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: white;
+    background-color: grey;
   }
   a:hover {
     color: #747bff;
