@@ -26,7 +26,7 @@
 </script>
 
 <content>
-  <h1>Recipe Assistant</h1>
+  <h1>Recipe Finder</h1>
   {#if data.thinking}
     <Spinner />
   {:else}
