@@ -26,10 +26,16 @@
   }
   async function handleSubmit() {
     data.thinking = true;
-    data.recipes = await getRecipes(
-      ingredients.filter((i) => i),
-      preference
-    );
+    try {
+      data.recipes = await getRecipes(
+        ingredients.filter((i) => i),
+        preference
+      );
+    } catch (e) {
+      let msg = e.response?.data?.message ?? e.message;
+      console.error(msg);
+      alert("Something went wrong. Please try again. \n" + msg);
+    }
     data.thinking = false;
     goNextPage();
   }
@@ -37,7 +43,7 @@
 
 <div class="card">
   <h2>Ingredients</h2>
-  Please provide available ingredients and preference (optional).
+  Please provide available ingredients and preference.
   <form on:submit|preventDefault={handleSubmit}>
     <ul>
       {#each ingredients as ingredient, i}
@@ -50,7 +56,7 @@
         </li>
       {/each}
     </ul>
-    <label>preference (ex. cuisine): <input type="text" bind:value={preference} /></label>
+    <label>preference: <input type="text" bind:value={preference} /></label>
     <hr />
     <button id="submit">Submit</button>
   </form>

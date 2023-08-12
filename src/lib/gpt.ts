@@ -12,7 +12,7 @@ const gptmodel = "gpt-3.5-turbo-0613";
 
 export function InitApi(apikey: string) {
   const configuration = new Configuration({
-    apiKey: apikey,
+    apiKey: apikey.trim(),
   });
   delete configuration.baseOptions.headers["User-Agent"];
   api = new OpenAIApi(configuration);
@@ -306,14 +306,25 @@ export async function getGptResponse(
 ) {
   messages.update((msg) => [...msg, { role: "user", content: query }]);
   console.log(messages);
-  const completion = await api.createChatCompletion({
-    model: gptmodel,
-    messages: get(messages),
-    temperature: 0,
-    ...options,
-  });
-  console.log(completion.data);
-  const message = completion.data.choices[0].message;
-  messages.update((msg) => [...msg, message]);
-  return message;
+  try {
+    const completion = await api.createChatCompletion({
+      model: gptmodel,
+      messages: get(messages),
+      temperature: 0,
+      ...options,
+    });
+    console.log(completion.data);
+    const message = completion.data.choices[0].message;
+    messages.update((msg) => [...msg, message]);
+    return message;
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+      throw new Error(error.response.data.error.message);
+    } else {
+      console.log(error.message);
+      throw new Error(error.message);
+    }
+  }
 }

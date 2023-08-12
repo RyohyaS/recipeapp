@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: gray;
+  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -33,7 +33,6 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  color: #2b2a2b;
 }
 
 .card {
@@ -64,7 +63,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: darkgray;
+  background-color: #484848;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -76,15 +75,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-
 @media (prefers-color-scheme: light) {
   :root {
-    color: #ffffff;
+    color: #213547;
     background-color: #ffffff;
-    
   }
   a:hover {
     color: #747bff;
   }
-
+  button {
+    background-color: #f9f9f9;
+  }
 }
