@@ -76,7 +76,7 @@ button:focus-visible {
 }
 
 button[type="submit"]:style {
-  background-color: blue; 
+  background-color: gray; 
 }
 
 
