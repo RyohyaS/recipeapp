@@ -76,3 +76,8 @@ html, body {
   .button:hover {
     background-color: #ff6f00;
   }
+
+
+  h3 {
+    color: blue;
+  }
