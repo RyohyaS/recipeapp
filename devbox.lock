@@ -1,13 +1,13 @@
 {
   "lockfile_version": "1",
   "packages": {
-    "mkcert@latest": {
+    "mkcert": {
       "resolved": "github:NixOS/nixpkgs/f80ac848e3d6f0c12c52758c0f25c10c97ca3b62#mkcert"
     },
-    "nodePackages.pnpm@latest": {
+    "nodePackages.pnpm": {
       "resolved": "github:NixOS/nixpkgs/f80ac848e3d6f0c12c52758c0f25c10c97ca3b62#nodePackages.pnpm"
     },
-    "nodejs@latest": {
+    "nodejs": {
       "resolved": "github:NixOS/nixpkgs/f80ac848e3d6f0c12c52758c0f25c10c97ca3b62#nodejs"
     }
   }

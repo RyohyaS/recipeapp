@@ -1,27 +1,6 @@
-<script>
-  export let message = "Loading...";
-</script>
-
-<div class="modal">
-  <div class="loader" />
-  <div class="message">{message}</div>
-</div>
+<div class="loader">Loading...</div>
 
 <style>
-  .modal {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(22, 22, 22, 0.8);
-    text-align: center;
-  }
-  .message {
-    color: aquamarine;
-    font-size: 3rem;
-  }
   .loader {
     margin: 100px auto;
     font-size: 25px;

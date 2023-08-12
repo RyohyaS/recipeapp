@@ -1,5 +1,5 @@
 <script>
-  import { InitApis, abort, messages } from "./lib/gpt";
+  import { InitApi, messages } from "./lib/gpt";
   import Home from "./views/Home.svelte";
   import { isdebug, apikey } from "./lib/store";
   import { onMount } from "svelte";
@@ -10,10 +10,8 @@
   $isdebug = !!document.location.hash.match(/debug/);
 
   onMount(() => {
-    console.info("============== starting app ===============");
-    abort();
     if (key) {
-      InitApis(key);
+      InitApi(key);
     } else {
       document.querySelector("dialog").showModal();
     }
@@ -30,7 +28,7 @@
     event.preventDefault();
     key = key0;
     apikey.set(key);
-    InitApis(key);
+    InitApi(key);
     document.querySelector("dialog").close();
   }
 </script>

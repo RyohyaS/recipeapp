@@ -6,9 +6,9 @@
   const recipes = data.recipes;
   const dispatch = createEventDispatcher();
   export async function goNextPage(name) {
-    data.thinking = "preparing instruction";
+    data.thinking = true;
     data.instruction = await getInstruction(name);
-    data.thinking = "";
+    data.thinking = false;
     dispatch("continue");
   }
 </script>

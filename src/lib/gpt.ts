@@ -8,20 +8,9 @@ import { get, writable } from "svelte/store";
 import { isdebug } from "./store";
 
 let api: OpenAIApi;
-let open_apikey: string;
 const gptmodel = "gpt-3.5-turbo-0613";
 
-const controller = new AbortController();
-const { signal } = controller;
-
-export function abort() {
-  console.log("aborting");
-  controller.abort();
-}
-
-export function InitApis(apikey: string) {
-  console.info("api initialized", apikey.length);
-  open_apikey = apikey;
+export function InitApi(apikey: string) {
   const configuration = new Configuration({
     apiKey: apikey,
   });
@@ -43,7 +32,6 @@ export function getLastResponse() {
 }
 
 export function resetMessages() {
-  abort();
   messages.set([message0]);
 }
 
@@ -200,7 +188,7 @@ async function getMockRecipes() {
   ];
 }
 
-export async function getRecipes(ingredients: string[], preference = "") {
+export async function getRecipes(ingredients: string[], cuisine: string) {
   const ingredients_all = ingredients
     .map((i) => i.trim())
     .filter((i) => i)
@@ -209,7 +197,7 @@ export async function getRecipes(ingredients: string[], preference = "") {
     Do not give me instructions now. I will ask for instructions later for one of your suggestions.
     The following ingredients are available:
   ${ingredients_all}`;
-  if (preference) promptString += ` I prefer ${preference} cuisine.`;
+  if (cuisine) promptString += ` I prefer ${cuisine} cuisine.`;
   if (get(isdebug)) return await getMockRecipes();
   const message = await getGptResponse(promptString, {
     functions: [{ name: "set_recipe", parameters: recipes_schema }],
@@ -318,98 +306,14 @@ export async function getGptResponse(
 ) {
   messages.update((msg) => [...msg, { role: "user", content: query }]);
   console.log(messages);
-  const completion = await api.createChatCompletion(
-    {
-      model: gptmodel,
-      messages: get(messages),
-      temperature: 0,
-      ...options,
-    },
-    { signal }
-  );
+  const completion = await api.createChatCompletion({
+    model: gptmodel,
+    messages: get(messages),
+    temperature: 0,
+    ...options,
+  });
   console.log(completion.data);
   const message = completion.data.choices[0].message;
   messages.update((msg) => [...msg, message]);
   return message;
-}
-
-declare global {
-  interface Window {
-    vad: {
-      MicVAD: { new: (x: any) => any };
-      utils: { encodeWAV: (audio: Float32Array) => string };
-    };
-  }
-}
-
-async function getVoiceTranscription(
-  file: File,
-  lang = "ja_JP"
-): Promise<string> {
-  try {
-    const formData = new FormData();
-    formData.append("model", "whisper-1");
-    formData.append("language", lang);
-    formData.append("file", file);
-    const response = await fetch(
-      "https://api.openai.com/v1/audio/transcriptions",
-      {
-        signal,
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${open_apikey}`,
-        },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Error");
-    }
-    const data = await response.json();
-    return data.text;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export async function transcribeVoice(lang: string, cb): Promise<string> {
-  console.log("transcribeVoice called");
-  return new Promise(async (resolve, reject) => {
-    const microphone = await window.vad.MicVAD.new({
-      minSpeechFrames: 20, // it has to be over 10 seconds
-      onSpeechStart: () => {
-        cb({ listening: true });
-        console.info("Speech start detected");
-      },
-      onSpeechEnd: async (floatArr) => {
-        microphone.pause();
-        console.log("Speech end detected", floatArr.length);
-        cb({ transcribing: true });
-        const wavfile = new File(
-          [window.vad.utils.encodeWAV(floatArr)],
-          `input.wav`
-        );
-        // TODO
-        // resolve("test");
-        // return;
-        const message = await getVoiceTranscription(
-          wavfile,
-          lang.split(/-/)[0]
-        );
-        resolve(message);
-      },
-    }).catch((err) => {
-      console.error(err);
-      reject(err);
-    });
-    signal.addEventListener(
-      "abort",
-      () => {
-        microphone.pause();
-        reject("abort");
-      },
-      { once: true }
-    );
-    microphone.start();
-  });
 }
